@@ -1,1 +1,10 @@
 .env
+secret_key.py
+
+__pycache__/
+
+*.pyc
+
+models/**/*.safetensors
+
+models/**/*.bin
