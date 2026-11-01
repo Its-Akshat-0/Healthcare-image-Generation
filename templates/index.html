@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RuralHealth Vision</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header><div class="brand">✚ RuralHealth Vision</div><div class="tagline">Source-linked health education for rural communities</div></header>
+  <main>
+    <section class="hero">
+      <h1>Understand health. Visualize prevention.</h1>
+      <p>Enter a disease or health topic and ask about its causes, treatment, or prevention. Source-linked text is available below each poster.</p>
+      <form id="query-form">
+        <label for="disease">Disease or health topic</label>
+        <input id="disease" name="disease" placeholder="Type a disease or health topic, e.g. dengue" autocomplete="off" required>
+        <label for="question">Your question</label>
+        <input id="question" name="question" list="question-examples" placeholder="Ask about causes, treatment, or prevention" value="How can I prevent it?">
+        <datalist id="question-examples">
+          <option value="What causes this disease?">
+          <option value="How does it spread?">
+          <option value="How is it treated?">
+          <option value="How can I prevent it?">
+        </datalist>
+        <label class="check"><input id="make-image" type="checkbox" checked> Generate educational visual</label>
+        <button type="submit">Get health information</button>
+      </form>
+    </section>
+    <div id="status" role="status"></div>
+    <section id="results" hidden>
+      <div id="image-area"></div>
+      <details id="text-details">
+        <summary>Show answer, health details, and sources</summary>
+        <h2 id="result-title"></h2>
+        <p id="match-notice" hidden></p>
+        <p id="summary"></p>
+        <div id="sections"></div>
+        <div id="image-error" class="image-error" hidden></div>
+        <h3>Sources</h3><ul id="sources"></ul>
+        <p class="notice" id="notice"></p>
+      </details>
+    </section>
+  </main>
+  <footer>Educational prototype only · Not a diagnosis or replacement for professional medical care</footer>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

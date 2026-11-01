@@ -1,0 +1,8 @@
+-r requirements.txt
+torch>=2.2
+transformers>=4.45
+datasets>=3.0
+accelerate>=1.0
+evaluate>=0.4
+sentence-transformers>=3.0
+faiss-cpu>=1.8

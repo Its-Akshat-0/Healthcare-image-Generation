@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1120" viewBox="0 0 1000 1120">
+<defs>
+  <linearGradient id="hero" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e5f6ef"/><stop offset="1" stop-color="#dceefa"/></linearGradient>
+  <linearGradient id="title" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#a91f2c"/><stop offset="1" stop-color="#d44445"/></linearGradient>
+  <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#204d43" flood-opacity=".10"/></filter>
+</defs>
+<rect width="1000" height="1120" fill="#f4f8f5"/>
+<rect x="22" y="22" width="956" height="1076" rx="28" fill="#ffffff" filter="url(#shadow)"/>
+<circle cx="69" cy="70" r="28" fill="#0a7564"/><path d="M69 52v36M51 70h36" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+<text x="112" y="66" font-family="Arial,sans-serif" font-size="24" font-weight="700" fill="#075b50">RuralHealth Vision</text>
+<text x="112" y="91" font-family="Arial,sans-serif" font-size="13" fill="#52736c">HEALTHY VILLAGES · STRONGER COMMUNITIES</text>
+<text x="55" y="166" font-family="Arial,sans-serif" font-size="68" font-weight="800" letter-spacing="1" fill="url(#title)">DIARRHOEAL DISEASE</text>
+<rect x="55" y="183" width="500" height="44" rx="20" fill="#08745f"/>
+<text x="76" y="212" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#fff">Know the facts  ·  Protect  ·  Stay healthy</text>
+<rect x="55" y="250" width="890" height="174" rx="24" fill="url(#hero)"/>
+<text x="82" y="289" font-family="Arial,sans-serif" font-size="15" font-weight="700" letter-spacing="1" fill="#08745f">WHAT TO KNOW</text>
+
+<text x="82" y="324" font-family="Arial,sans-serif" font-size="18" fill="#173d36">Health information from the reviewed sources listed below.</text>
+<circle cx="800" cy="332" r="71" fill="#ffffff" opacity=".75"/>
+<path d="M714 345l85-69 85 69v57h-170z" fill="#15947a"/><path d="M701 347l98-80 98 80" fill="none" stroke="#08745f" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="779" y="350" width="37" height="52" rx="4" fill="#ffcf70"/><rect x="733" y="353" width="30" height="28" rx="3" fill="#d7f3ec"/><rect x="840" y="353" width="30" height="28" rx="3" fill="#d7f3ec"/>
+<circle cx="730" cy="291" r="13" fill="#f4b38d"/><path d="M714 326q16-28 32 0v16h-32z" fill="#e86458"/>
+<circle cx="867" cy="293" r="13" fill="#b97050"/><path d="M850 328q17-28 34 0v16h-34z" fill="#307fb1"/>
+<path d="M723 344l-17 25M876 344l17 25" stroke="#277d63" stroke-width="6" stroke-linecap="round"/>
+<text x="674" y="415" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="1" fill="#52736c">COMMUNITY HEALTH ILLUSTRATION</text>
+<rect x="55" y="455" width="435" height="309" rx="22" fill="#fff0ef"/>
+<circle cx="98" cy="498" r="25" fill="#b52b39"/>
+<path d="M98 482l13 5v10q0 12-13 18q-13-6-13-18v-10z" fill="none" stroke="#fff" stroke-width="3"/><path d="M91 497l5 5 10-11" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="135" y="504" font-family="Arial,sans-serif" font-size="25" font-weight="700" fill="#b52b39">Prevention and care</text>
+<circle cx="81" cy="540" r="4" fill="#b52b39"/>
+<text x="95" y="546" font-family="Arial,sans-serif" font-size="16" fill="#203b35">Diarrhoeal diseases can spread through</text>
+<circle cx="81" cy="563" r="4" fill="#b52b39"/>
+<text x="95" y="569" font-family="Arial,sans-serif" font-size="16" fill="#203b35">contaminated food or water and poor hygiene,</text>
+<circle cx="81" cy="586" r="4" fill="#b52b39"/>
+<text x="95" y="592" font-family="Arial,sans-serif" font-size="16" fill="#203b35">depending on the cause. Safe water,</text>
+<circle cx="81" cy="609" r="4" fill="#b52b39"/>
+<text x="95" y="615" font-family="Arial,sans-serif" font-size="16" fill="#203b35">sanitation, handwashing and food hygiene help</text>
+<circle cx="81" cy="632" r="4" fill="#b52b39"/>
+<text x="95" y="638" font-family="Arial,sans-serif" font-size="16" fill="#203b35">prevent many cases. Dehydration is a major</text>
+<circle cx="81" cy="655" r="4" fill="#b52b39"/>
+<text x="95" y="661" font-family="Arial,sans-serif" font-size="16" fill="#203b35">danger; seek medical advice for severe</text>
+<circle cx="81" cy="678" r="4" fill="#b52b39"/>
+<text x="95" y="684" font-family="Arial,sans-serif" font-size="16" fill="#203b35">symptoms, blood in stool, inability to drink,</text>
+<circle cx="81" cy="701" r="4" fill="#b52b39"/>
+<text x="95" y="707" font-family="Arial,sans-serif" font-size="16" fill="#203b35">or signs of dehydration.</text>
+<text x="55" y="791" font-family="Arial,sans-serif" font-size="16" font-weight="700" fill="#075b50">SOURCES</text>
+<text x="65" y="816" font-family="Arial,sans-serif" font-size="11" fill="#415c55">World Health Organization: https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease</text>
+<path d="M22 1058 H978 V1070 Q978 1098 950 1098 H50 Q22 1098 22 1070 Z" fill="#075b50"/>
+<text x="55" y="1085" font-family="Arial,sans-serif" font-size="13" font-weight="700" fill="#fff">Educational information · Not a diagnosis or replacement for professional care</text>
+</svg>
