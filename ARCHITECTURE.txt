@@ -10,14 +10,17 @@ Flask UI on Windows
    |
    +--> Optional image request (disease + fixed topic only)
            |
-           v
-      Authenticated temporary ngrok tunnel
-           |
-           v
-      Stable Diffusion pipeline in active Colab GPU runtime
-           | varied portrait artwork PNG
-           v
-      Varied poster composition on Windows
-       (Diffusers artwork + overlaid sourced answer and facts)
+           +--> Local CUDA GPU available? --> Local Diffusers pipeline
+           |                                    |
+           +--> Otherwise / local failure --> Authenticated temporary
+                                                ngrok tunnel to active
+                                                Colab GPU runtime
+                                                       |
+                                                       v
+                                                  Artwork PNG
+                                                       |
+                                                       v
+                                      Poster composition on Windows
+                                (artwork + overlaid sourced answer and facts)
 
-Colab is not a continuously available server. Start the notebook service and tunnel when image generation is needed. If the runtime is offline, source-grounded text remains available in the SVG infographic fallback.
+The image helper prefers a local CUDA GPU and reuses its loaded pipeline. If local generation is unavailable or fails, configure and start the Colab notebook service and tunnel. Colab is not a continuously available server. If neither image backend is available, source-grounded text remains available with the SVG infographic fallback.

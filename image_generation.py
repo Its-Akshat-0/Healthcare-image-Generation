@@ -10,6 +10,9 @@ from pathlib import Path
 
 import requests
 
+_LOCAL_PIPELINE = None
+_LOCAL_PIPELINE_MODEL = None
+
 class ImageBackendUnavailable(RuntimeError):
     pass
 
@@ -33,6 +36,18 @@ def _build_prompt(disease, topic):
 def generate_illustration(disease, topic, facts, output_path):
     """Generate only the illustration; sourced poster text is composed separately."""
     endpoint = os.getenv("COLAB_IMAGE_API_URL", "").strip().rstrip("/")
+    # Prefer a usable local CUDA GPU automatically. If CUDA/Diffusers is not
+    # available, use the configured Colab endpoint instead.
+    local_error = None
+    try:
+        import torch
+        if torch.cuda.is_available():
+            return _generate_local(disease, topic, output_path, torch)
+    except ImportError as exc:
+        local_error = exc
+    except Exception as exc:
+        local_error = exc
+
     if endpoint:
         token = os.getenv("COLAB_IMAGE_API_TOKEN", "").strip()
         if not token:
@@ -62,28 +77,33 @@ def generate_illustration(disease, topic, facts, output_path):
         except requests.RequestException as exc:
             raise ImageBackendUnavailable(f"Colab image service is unavailable: {exc}") from exc
 
-    if os.getenv("ENABLE_DIFFUSION", "0") != "1":
-        raise ImageBackendUnavailable("Image generation is not configured.")
-    try:
-        import torch
-        from diffusers import AutoPipelineForText2Image
-        if not torch.cuda.is_available():
-            raise ImageBackendUnavailable("No local CUDA GPU is available; start the Colab image service.")
-        model_id = os.getenv("DIFFUSION_MODEL_ID", "stable-diffusion-v1-5/stable-diffusion-v1-5")
-        pipe = AutoPipelineForText2Image.from_pretrained(
+    if local_error:
+        detail = f"Local GPU generation failed: {local_error}. "
+    else:
+        detail = "No local CUDA GPU is available. "
+    raise ImageBackendUnavailable(
+        detail + "Configure the temporary Colab service, or install the image dependencies and a compatible CUDA-enabled PyTorch build."
+    )
+
+
+def _generate_local(disease, topic, output_path, torch):
+    """Load the local Diffusers pipeline once and reuse it for later requests."""
+    global _LOCAL_PIPELINE, _LOCAL_PIPELINE_MODEL
+    from diffusers import AutoPipelineForText2Image
+
+    model_id = os.getenv("DIFFUSION_MODEL_ID", "stable-diffusion-v1-5/stable-diffusion-v1-5")
+    if _LOCAL_PIPELINE is None or _LOCAL_PIPELINE_MODEL != model_id:
+        _LOCAL_PIPELINE = AutoPipelineForText2Image.from_pretrained(
             model_id, torch_dtype=torch.float16, use_safetensors=True
         ).to("cuda")
-        image = pipe(
-            prompt=_build_prompt(disease, topic),
-            negative_prompt="text, watermark, graphic injury, misleading medical equipment",
-            width=512, height=768, num_inference_steps=24,
-        ).images[0]
-        image.save(output_path)
-        return str(output_path)
-    except ImageBackendUnavailable:
-        raise
-    except Exception as exc:
-        raise ImageBackendUnavailable(f"Local diffusion failed: {exc}") from exc
+        _LOCAL_PIPELINE_MODEL = model_id
+    image = _LOCAL_PIPELINE(
+        prompt=_build_prompt(disease, topic),
+        negative_prompt="text, watermark, graphic injury, misleading medical equipment",
+        width=512, height=768, num_inference_steps=24,
+    ).images[0]
+    image.save(output_path)
+    return str(output_path)
 
 # Keep the old import name usable for existing scripts.
 def generate_image(disease, topic, facts, output_path):

@@ -1,10 +1,17 @@
 .env
 secret_key.py
+.presentation_build/
+.qa_report/
+.venv/
+venv/
 
+# Python runtime and generated cache files
 __pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyo
 
-*.pyc
-
+# Model checkpoints can exceed ordinary GitHub file-size limits.
+# Keep small model configuration and tokenizer files tracked.
 models/**/*.safetensors
-
 models/**/*.bin

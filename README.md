@@ -1,13 +1,19 @@
 # RuralHealth Vision
 
+**GitHub repository:** https://github.com/Its-Akshat-0/Healthcare-image-Generation
+
+This repository contains the source code, medical passage dataset, evaluation and
+training scaffolding, and the project report. Add the final presentation slides
+to this repository before submission; no slide deck is currently included.
+
 A college-minor-project prototype for source-linked rural health education. It combines:
-- a small, clearly labelled starter knowledge base,
+- a source-linked health passage collection, including imported records that still need human review,
 - keyword retrieval (baseline; replace/extend with embeddings),
 - optional Hugging Face extractive QA model loading,
 - optional Diffusers artwork with locally composed, source-grounded poster text,
 - Flask web UI and evaluation scaffolding.
 
-**Medical safety:** this is an educational prototype, not a diagnostic tool. The starter data is deliberately small and should be checked against the current official sources before submission or real-world use. Do not report model fine-tuning as completed until you actually run training and evaluate the saved model.
+**Medical safety:** this is an educational prototype, not a diagnostic tool. Review the included passages against their current official sources before using them as guidance. Do not report model fine-tuning as completed until you actually run training and evaluate the saved model.
 
 ## Quick start (Windows PowerShell)
 
@@ -75,13 +81,41 @@ The starter examples are templates and are not sufficient for a meaningful medic
 
 ## Optional image generation
 
-When diffusion is connected, it creates varied portrait artwork and Flask uses Pillow to overlay readable health copy in one of several poster compositions. Text and citations come from the reviewed local dataset; Diffusers supplies the artwork only. For local generation, a compatible CUDA GPU, model download, and licence review are required; set `ENABLE_DIFFUSION=1` and `DIFFUSION_MODEL_ID` after checking the model card. For a Windows machine without a suitable GPU, use the temporary Colab bridge below. When image generation is unavailable, the app uses the designed SVG infographic fallback.
+When diffusion is connected, it creates varied portrait artwork and Flask uses Pillow to overlay readable health copy in one of several poster compositions. Text and citations come from the reviewed local dataset; Diffusers supplies the artwork only. The image backend automatically uses a local CUDA GPU when CUDA-enabled PyTorch and Diffusers are installed. Otherwise it uses the configured Colab service. If neither backend is available, the app retains the designed SVG infographic fallback. Check the selected model card and licence before use.
+
+### Local GPU setup
+
+Install the image packages in the same Python environment as Flask:
+
+```powershell
+pip install -r requirements-image.txt
+```
+
+Install the CUDA-enabled PyTorch build appropriate for your GPU using the
+official PyTorch installation selector. Set `DIFFUSION_MODEL_ID` if you want a
+different Diffusers-compatible model. The first local run downloads the model;
+later requests reuse the loaded pipeline. You do not need to set
+`ENABLE_DIFFUSION`.
+
+### Google Colab fallback
+
+When the local machine has no usable CUDA GPU, the image backend uses the
+Colab endpoint configured in `COLAB_IMAGE_API_URL` and
+`COLAB_IMAGE_API_TOKEN`. Open `notebooks/ruralhealthvision_colab.ipynb` in
+Google Colab and follow its cells to start the temporary GPU service. Keep the
+notebook runtime and tunnel active while requesting images. Copy the printed
+URL and configure the two environment variables in PowerShell as shown below.
+The Flask app, retrieval, source links, and poster-text composition remain
+local. Only the disease name and fixed image topic are sent to Colab.
 
 ## Project folders
 
-- `data/medical_documents.jsonl`: small starter set, not a large corpus
+- `data/medical_documents.jsonl`: source-linked passage collection; review imported records marked `NOT_HUMAN_REVIEWED`
 - `scripts/`: dataset validation and MedlinePlus XML import scaffold
 - `training/`: fine-tuning starter and QA templates
+- `notebooks/ruralhealthvision_colab.ipynb`: Colab GPU image-service setup
+- `presentation/`: project presentation slides
+- `RuralHealth_Vision_Minor_Project_Report_Updated.docx`: project report
 - `image_generation.py`: optional diffusion integration
 - `evaluation/evaluate_retrieval.py`: simple retrieval sanity-check scaffold
 - `templates/`, `static/`: web UI
@@ -91,31 +125,11 @@ When diffusion is connected, it creates varied portrait artwork and Flask uses P
 Report actual counts, training logs, test-set metrics, image latency, and screenshots from your own run. If training is not completed by the deadline, describe it as planned/future work rather than claiming results.
 
 
-## Stable Diffusion from Colab (optional)
+## Configure the Colab fallback
 
-The Flask app, DistilBERT QA model, retrieval, and poster text stay on Windows. Stable Diffusion runs in the Colab GPU runtime and returns portrait artwork. Flask overlays retrieved health copy using varied poster compositions. The Colab endpoint is temporary: it works only while the notebook runtime, server cell, and ngrok tunnel are active. If Colab disconnects, the Flask app still returns source-grounded text and uses the designed SVG infographic fallback.
+Follow `notebooks/ruralhealthvision_colab.ipynb` to install the service dependencies, load the image model on a Colab GPU, and start the authenticated tunnel. Keep the notebook cell running. Copy the printed temporary tunnel base URL without `/generate`.
 
-### Start the image service in Colab
-
-1. Open the notebook where your `StableDiffusionPipeline` is already loaded as `pipe`.
-2. Install the small tunnel helper in a cell: `!pip -q install pyngrok`.
-3. Add two Colab Secrets: `NGROK_AUTHTOKEN` (from your ngrok account) and `RH_IMAGE_TOKEN` (a long random secret). Enable notebook access to both secrets.
-4. Run this in a cell:
-
-```python
-import os
-from google.colab import userdata
-from colab_image_service import start_colab_image_service
-os.environ["NGROK_AUTHTOKEN"] = userdata.get("NGROK_AUTHTOKEN")
-os.environ["RH_IMAGE_TOKEN"] = userdata.get("RH_IMAGE_TOKEN")
-server, tunnel = start_colab_image_service(pipe)
-```
-
-If the module file is not in the notebook working directory, upload `colab_image_service.py` from this project first. Keep the cell running. Copy the printed temporary tunnel base URL (without `/generate`).
-
-### Point the Windows Flask app to the active tunnel
-
-In the same PowerShell window used to launch Flask, set the URL printed by Colab and the exact same image token stored in Colab Secrets:
+In the same PowerShell window used to launch Flask, set the URL printed by Colab and the same image token stored in Colab Secrets:
 
 ```powershell
 $env:COLAB_IMAGE_API_URL = "https://YOUR-TEMPORARY-NGROK-URL"
@@ -123,6 +137,4 @@ $env:COLAB_IMAGE_API_TOKEN = "YOUR_LONG_RANDOM_IMAGE_TOKEN"
 python app.py
 ```
 
-These environment values last only for that PowerShell window. Restart Flask after Colab gives you a new tunnel URL. Keep the token private and do not commit it. This bridge accepts only a disease name and a fixed topic; it does not send medical passages to the image model.
-
-The endpoint returns an illustration PNG only. Flask composes a PNG poster from that artwork, overlaid with readable passages and source attribution. The design changes position and color treatment between requests; it does not ask Stable Diffusion to draw words. If Colab is offline, the SVG infographic fallback appears instead. The Stable Diffusion image is illustrative and is not a medical source. Keep the checkbox off to skip image generation when you do not need a poster.
+These environment values last only for that PowerShell window. Restart Flask after Colab gives you a new tunnel URL. Keep the token private and do not commit it. The endpoint receives only the disease name and fixed image topic, and returns artwork without medical text. Flask composes the poster locally. If Colab is offline and no local GPU is available, the SVG infographic fallback appears. The generated image is illustrative and is not a medical source.
