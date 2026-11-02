@@ -15,3 +15,8 @@ __pycache__/
 # Keep small model configuration and tokenizer files tracked.
 models/**/*.safetensors
 models/**/*.bin
+models/
+*.safetensors
+*.bin
+*.h5
+*.keras
